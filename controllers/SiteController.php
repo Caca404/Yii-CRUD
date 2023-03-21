@@ -9,6 +9,7 @@ use yii\web\Response;
 use yii\filters\VerbFilter;
 use app\models\LoginForm;
 use app\models\ContactForm;
+use app\models\EntryForm;
 
 class SiteController extends Controller
 {
@@ -62,6 +63,35 @@ class SiteController extends Controller
     public function actionIndex()
     {
         return $this->render('index');
+    }
+
+    /**
+     * Action Teste
+     * action.{'Nome aleatório'}
+     */
+    public function actionSay($message = 'Hello')
+    {
+        $model = new EntryForm();
+        $model->name = 'Qiang';
+        $model->email = 'bad';
+        if ($model->validate()) $modeloMessage = "Válido";
+        else $modeloMessage = $model->getErrors();
+
+        return $this->render('test', ['message' => $message, "modelo" => $modeloMessage]);
+    }
+
+    public function actionEntry()
+    {
+        $model = new EntryForm();
+
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+            // valid data received in $model
+
+            return $this->render('entry-confirm', ['model' => $model]);
+        } else {
+            // either the page is initially displayed or there is some validation error
+            return $this->render('entry', ['model' => $model]);
+        }
     }
 
     /**
